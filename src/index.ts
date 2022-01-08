@@ -128,6 +128,7 @@ export async function run(): Promise<void> {
 
         // New service or update to existing service
         let serviceId: string | undefined = undefined;
+        let serviceUrl: string | undefined = undefined;
         if (!serviceArn) {
             info(`Creating service ${serviceName}`);
             const command = new CreateServiceCommand({
@@ -181,7 +182,8 @@ export async function run(): Promise<void> {
             }
             const createServiceResponse = await client.send(command);
             serviceId = createServiceResponse.Service?.ServiceId;
-            info(`Service creation initiated with service ID - ${serviceId}`)
+            serviceUrl = createServiceResponse.Service?.ServiceUrl;
+            info(`Service creation initiated with service ID - ${serviceId} and URL - ${serviceUrl}`)
             serviceArn = createServiceResponse.Service?.ServiceArn;
         } else {
             info(`Updating existing service ${serviceName}`);
@@ -231,12 +233,14 @@ export async function run(): Promise<void> {
             }
             const updateServiceResponse = await client.send(command);
             serviceId = updateServiceResponse.Service?.ServiceId;
-            info(`Service update initiated with operation ID - ${serviceId}`)
+            serviceUrl = updateServiceResponse.Service?.ServiceUrl;
+            info(`Service update initiated with operation ID - ${serviceId} and URL - ${serviceUrl}`)
             serviceArn = updateServiceResponse.Service?.ServiceArn;
         }
 
         // Set output
         setOutput('service-id', serviceId);
+        setOutput('service-url', serviceUrl);
 
         // Wait for service to be stable (if required)
         if (waitForService === "true") {
