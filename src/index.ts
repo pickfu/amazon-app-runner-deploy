@@ -240,6 +240,7 @@ export async function run(): Promise<void> {
 
         // Set output
         setOutput('service-id', serviceId);
+        setOutput('service-arn', serviceArn);
         setOutput('service-url', serviceUrl);
 
         // Wait for service to be stable (if required)
