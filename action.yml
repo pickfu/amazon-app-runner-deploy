@@ -13,6 +13,9 @@ inputs:
   access-role-arn:
     description: 'ARN for IAM Role, if the App Runner service is configured with ECR image'
     required: false
+  instance-role-arn:
+    description: 'ARN of an IAM role that provides permissions to your App Runner service. These are permissions that your code needs when it calls any AWS APIs.'
+    required: false
   repo:
     description: "GitHub source repository URL"
     required: false

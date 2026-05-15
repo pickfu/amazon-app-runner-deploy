@@ -62,6 +62,7 @@ export async function run(): Promise<void> {
     const serviceName = getInput('service', { required: true });
     const sourceConnectionArn = getInput('source-connection-arn', { required: false });
     const accessRoleArn = getInput('access-role-arn', { required: false });
+    const instanceRoleArn = getInput('instance-role-arn', { required: false });
     const repoUrl = getInput('repo', { required: false });
     const imageUri = getInput('image', { required: false });
     const runtime = getInput('runtime', { required: false });
@@ -136,6 +137,7 @@ export async function run(): Promise<void> {
                 InstanceConfiguration: {
                     Cpu: `${cpu} vCPU`,
                     Memory: `${memory} GB`,
+                    InstanceRoleArn: instanceRoleArn || undefined,
                 },
                 SourceConfiguration: {}
             });
@@ -189,6 +191,11 @@ export async function run(): Promise<void> {
             info(`Updating existing service ${serviceName}`);
             const command = new UpdateServiceCommand({
                 ServiceArn: serviceArn,
+                InstanceConfiguration: {
+                    Cpu: `${cpu} vCPU`,
+                    Memory: `${memory} GB`,
+                    InstanceRoleArn: instanceRoleArn || undefined,
+                },
                 SourceConfiguration: {}
             });
             if (isImageBased) {
